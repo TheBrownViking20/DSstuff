@@ -26,9 +26,9 @@ y = dataset.iloc[:,12].values
 from sklearn.cross_validation import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
-# Fitting the Decision Tree Regression to the dataset
-from sklearn.tree import DecisionTreeRegressor
-regressor = DecisionTreeRegressor(random_state=0)
+# Fitting the SVR to the dataset
+from sklearn.svm import SVR
+regressor = SVR(kernel = 'rbf')
 regressor.fit(X_train,y_train)
 
 # Predicting a new result
@@ -36,5 +36,5 @@ y_pred = regressor.predict(X_test)
 
 from sklearn.metrics import accuracy_score
 
-accuracy_score(y_test, y_pred)
-accuracy_score(y_test, y_pred, normalize=False)
+print(accuracy_score(y_test, y_pred))
+print(accuracy_score(y_test, y_pred, normalize=False))
