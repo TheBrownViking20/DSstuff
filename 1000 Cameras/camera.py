@@ -19,3 +19,22 @@ for i in dataset.columns:
 for i in  dataset.drop(['Model','Brand'], axis=1).columns:
     dataset[i] = dataset[i].fillna(int(dataset[i].mean()))
     
+X = dataset.iloc[:,1:12].values
+y = dataset.iloc[:,12].values
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.cross_validation import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+# Fitting the Decision Tree Regression to the dataset
+from sklearn.tree import DecisionTreeRegressor
+regressor = DecisionTreeRegressor(random_state=0)
+regressor.fit(X_train,y_train)
+
+# Predicting a new result
+y_pred = regressor.predict(X_test)
+
+from sklearn.metrics import accuracy_score
+
+accuracy_score(y_test, y_pred)
+accuracy_score(y_test, y_pred, normalize=False)
