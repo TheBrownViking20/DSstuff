@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set_style('whitegrid')
 
-
 # Importing data
 decks = pd.read_csv('data.csv')
 cards = pd.read_json('refs.json')
@@ -28,6 +27,13 @@ for i in decks['deck_class'].unique():
 
 decks['deck_type'].value_counts().plot.bar()
 
+
 for i in decks['deck_class'].unique():
     print(i,end=" : \n")
-    print(decks['deck_archetype'][decks['deck_archetype'] != 'Unknown'][decks['deck_class'] == i].value_counts())
+    decks['deck_archetype'][decks['deck_archetype'] != 'Unknown'][decks['deck_class'] == i].value_counts().plot.bar()
+    plt.show()
+    
+for i in decks['deck_set'].unique():
+    decks['deck_class'][decks['deck_set'] == i].value_counts().plot.line(label=i, figsize=(16,24))
+plt.legend(bbox_to_anchor=(1.04,1), loc="upper left")
+plt.show()
