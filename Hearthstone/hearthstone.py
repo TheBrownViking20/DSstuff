@@ -88,3 +88,27 @@ A = pd.DataFrame()
 A['Year'] = yearA
 A['Common Sets'] = commonA
 print(A)
+
+craft_type = []
+craft_mean = []
+for i in decks['deck_type'].unique():
+    craft_type.append(i)
+    craft_mean.append(decks['craft_cost'][decks['deck_type'] == i].mean())
+craft_df = pd.DataFrame()
+craft_df['Deck Type'] = craft_type
+craft_df['Mean Craft Cost'] = craft_mean
+print(craft_df)
+
+craft_class = []
+craft_mean = []
+for i in decks['deck_class'].unique():
+    craft_class.append(i)
+    craft_mean.append(decks['craft_cost'][decks['deck_class'] == i].mean())
+craft_df2 = pd.DataFrame()
+craft_df2['Deck Class'] = craft_class
+craft_df2['Mean Craft Cost'] = craft_mean
+print(craft_df2)
+
+decks['craft_cost'][decks['deck_type'] == 'Tournament'][decks['deck_class'] == 'Warrior'].mean()
+
+decks['craft_cost'][decks['deck_type'] == 'Arena'][decks['deck_class'] == 'Hunter'].mean()
