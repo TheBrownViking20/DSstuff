@@ -102,3 +102,65 @@ print(lemmatizer.lemmatize("rocks",pos="v"))
 print(lemmatizer.lemmatize("python"))
 print(lemmatizer.lemmatize("better",pos="a"))
 
+# Corpora
+from nltk.corpus import gutenberg
+from nltk.tokenize import sent_tokenize
+
+sample = gutenberg.raw("bible-kjv.txt")
+tok = sent_tokenize(sample)
+print(tok[5:15])
+
+# Wordnet
+from nltk.corpus import wordnet
+
+syns = wordnet.synsets("program")
+
+print(syns[0].lemmas())
+
+print(syns[0].definition())
+
+print(syns[0].examples())
+
+synonyms = []
+antonyms = []
+
+for syn in wordnet.synsets("good"):
+    for l in syn.lemmas():
+        synonyms.append(l.name())
+        if l.antonyms():
+            antonyms.append(l.antonyms()[0].name())
+            
+print(set(synonyms))
+print(set(antonyms))
+
+w1 = wordnet.synset("ship.n.01")
+w2 = wordnet.synset("boat.n.01")
+print(w1.wup_similarity(w2))
+
+w1 = wordnet.synset("ship.n.01")
+w2 = wordnet.synset("car.n.01")
+print(w1.wup_similarity(w2))
+
+w1 = wordnet.synset("ship.n.01")
+w2 = wordnet.synset("cat.n.01")
+print(w1.wup_similarity(w2))
+
+w1 = wordnet.synset("iron.n.01")
+w2 = wordnet.synset("copper.n.01")
+print(w1.wup_similarity(w2))
+
+# Text Classification
+import nltk
+import random
+from nltk.corpus import movie_reviews
+
+documents = [(list(movie_reviews.words(fileid)),category) for category in movie_reviews.categories() for fileid in movie_reviews.fileids(category)]
+random.shuffle(documents)
+print(documents[1])
+
+all_words = []
+for w in movie_reviews.words():
+    all_words.append(w.lower())
+
+all_words = nltk.FreqDist(all_words)
+print(all_words.most_common(15))
