@@ -73,8 +73,32 @@ def process_content_three():
     for i in tokenized[5:]:
         words = nltk.word_tokenize(i)
         tagged = nltk.pos_tag(words)
-        chunkGram = r"""Chunk: {<.*>+}]<VB.?|IN|DT|TO>+{ """
+        chunkGram = r"""Chunk: {<.*>+}
+                                }<VB.?|IN|DT|TO>+{ """
         chunkParser = nltk.RegexpParser(chunkGram)
         chunked = chunkParser.parse(tagged)
         chunked.draw()            
 process_content_three()
+
+# Named entity recognition
+
+def process_content_four():
+    for i in tokenized[5:]:
+        words = nltk.word_tokenize(i)
+        tagged = nltk.pos_tag(words)
+        namedEnt = nltk.ne_chunk(tagged,binary=True)
+        namedEnt.draw()
+process_content_four()
+
+# Lemmatizing
+import nltk
+from nltk.stem import WordNetLemmatizer
+
+lemmatizer = WordNetLemmatizer()
+print(lemmatizer.lemmatize("cats"))
+print(lemmatizer.lemmatize("cacti"))
+print(lemmatizer.lemmatize("geese"))
+print(lemmatizer.lemmatize("rocks",pos="v"))
+print(lemmatizer.lemmatize("python"))
+print(lemmatizer.lemmatize("better",pos="a"))
+
