@@ -237,3 +237,44 @@ print("LinearSVC accuracy percent: ",(nltk.classify.accuracy(LinearSVC_Classifie
 NuSVC_Classifier = SklearnClassifier(NuSVC())
 NuSVC_Classifier.train(training_set)
 print("NuSVC accuracy percent: ",(nltk.classify.accuracy(NuSVC_Classifier,testing_set))*100)
+
+# Combining algos with a vote
+from nltk.classify import ClassifierI
+from statistics import mode
+
+class VoteClassifier(ClassifierI):
+    def __init__(self, *classifiers):
+        self._classifiers = classifiers
+        
+    def classify(self, features):
+        votes = []
+        for c in self._classifiers:
+            v = c.classify(features)
+            votes.append(v)
+        return mode(votes)
+    
+    def confidence(self, features):
+        votes = []
+        for c in self._classifiers:
+            v = c.classify(features)
+            votes.append(v)
+        
+        choice_votes = votes.count(mode(votes))
+        conf = choice_votes / len(votes)
+        return conf
+    
+voted_classifier = VoteClassifier(classifier,
+                                  NuSVC_Classifier,
+                                  LinearSVC_Classifier,
+                                  SGDClassifier_Classifier,
+                                  MNB_Classifier,
+                                  BNB_Classifier,
+                                  LogisticRegression_Classifier)
+print("voted_classifier accuracy percent: ",(nltk.classify.accuracy(voted_classifier,testing_set))*100)
+
+print("Classification:",voted_classifier.classify(testing_set[0][0]),"Confidence %:",voted_classifier.confidence(testing_set[0][0])*100)
+print("Classification:",voted_classifier.classify(testing_set[1][0]),"Confidence %:",voted_classifier.confidence(testing_set[1][0])*100)
+print("Classification:",voted_classifier.classify(testing_set[2][0]),"Confidence %:",voted_classifier.confidence(testing_set[2][0])*100)
+print("Classification:",voted_classifier.classify(testing_set[3][0]),"Confidence %:",voted_classifier.confidence(testing_set[3][0])*100)
+print("Classification:",voted_classifier.classify(testing_set[4][0]),"Confidence %:",voted_classifier.confidence(testing_set[4][0])*100)
+print("Classification:",voted_classifier.classify(testing_set[5][0]),"Confidence %:",voted_classifier.confidence(testing_set[5][0])*100)
