@@ -65,3 +65,12 @@ item_df['Production_Rank'] = item_df['Sum'].rank(ascending=False)
 item_df['Item_Name'][item_df['Production_Rank'] < 11.0].sort_values()
 
 sns.factorplot("Item", data=df[(df['Item']=='Wheat and products') | (df['Item']=='Rice (Milled Equivalent)') | (df['Item']=='Maize and products') | (df['Item']=='Potatoes and products') | (df['Item']=='Vegetables, Other') | (df['Item']=='Milk - Excluding Butter') | (df['Item']=='Cereals - Excluding Beer') | (df['Item']=='Starchy Roots') | (df['Item']=='Vegetables') | (df['Item']=='Fruits - Excluding Wine')], kind="count", hue="Element", size=20, aspect=.8)
+
+year_df = df.iloc[:,10:]
+fig, ax = plt.subplots(figsize=(16,10))
+sns.heatmap(year_df.corr(), ax=ax)
+
+sns.jointplot(x="Y1968", y="Y1961", data=df, kind="reg")
+sns.jointplot(x="Y1968", y="Y1963", data=df, kind="reg")
+sns.jointplot(x="Y1968", y="Y1986", data=df, kind="reg")
+sns.jointplot(x="Y1968", y="Y2013", data=df, kind="reg")
