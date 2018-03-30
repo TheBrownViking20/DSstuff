@@ -37,12 +37,12 @@ new_df = pd.DataFrame(new_df_dict)
 new_df = pd.DataFrame.transpose(new_df)
 new_df.columns = year_list
 
-mean_produce = []
+total_produce = []
 for i in range(174):
-    mean_produce.append(new_df.iloc[i,:].values.mean())
-new_df['Mean_Produce'] = mean_produce
+    total_produce.append(new_df.iloc[i,:].values.sum())
+new_df['Total_Produce'] = total_produce
 
-new_df['Rank'] = new_df['Mean_Produce'].rank(ascending=False)
+new_df['Rank'] = new_df['Total_Produce'].rank(ascending=False)
 
 
 item_list = list(df['Item'].unique())
@@ -70,13 +70,55 @@ year_df = df.iloc[:,10:]
 fig, ax = plt.subplots(figsize=(16,10))
 sns.heatmap(year_df.corr(), ax=ax)
 
-sns.jointplot(x="Y1968", y="Y1961", data=df, kind="reg")
-sns.jointplot(x="Y1968", y="Y1963", data=df, kind="reg")
-sns.jointplot(x="Y1968", y="Y1986", data=df, kind="reg")
-sns.jointplot(x="Y1968", y="Y2013", data=df, kind="reg")
+f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(10,10))
+ax1.set(xlabel='Y1968', ylabel='Y1961')
+ax2.set(xlabel='Y1968', ylabel='Y1963')
+ax3.set(xlabel='Y1968', ylabel='Y1986')
+ax4.set(xlabel='Y1968', ylabel='Y2013')
+sns.jointplot(x="Y1968", y="Y1961", data=df, kind="reg", ax=ax1)
+sns.jointplot(x="Y1968", y="Y1963", data=df, kind="reg", ax=ax2)
+sns.jointplot(x="Y1968", y="Y1986", data=df, kind="reg", ax=ax3)
+sns.jointplot(x="Y1968", y="Y2013", data=df, kind="reg", ax=ax4)
+plt.close(2)
+plt.close(3)
+plt.close(4)
+plt.close(5)
+plt.show()
 
 new_item_df = item_df.drop(["Item_Name","Sum","Production_Rank"], axis = 1)
 fig, ax = plt.subplots(figsize=(12,24))
 sns.heatmap(new_item_df,ax=ax)
 ax.set_yticklabels(item_df.Item_Name.values[::-1])
+plt.show()
+
+new_df.columns
+
+X = new_df.iloc[:,:-2].values
+
+X = pd.DataFrame(X)
+X = X.convert_objects(convert_numeric=True)
+X.columns = year_list
+
+from sklearn.cluster import KMeans
+wcss = []
+for i in range(1,11):
+    kmeans = KMeans(n_clusters=i,init='k-means++',max_iter=300,n_init=10,random_state=0)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+plt.plot(range(1,11),wcss)
+plt.title('The Elbow Method')
+plt.xlabel('Number of clusters')
+plt.ylabel('WCSS')
+plt.show()
+
+kmeans = KMeans(n_clusters=2,init='k-means++',max_iter=300,n_init=10,random_state=0) 
+y_kmeans = kmeans.fit_predict(X)
+
+X = X.as_matrix(columns=None)
+
+plt.scatter(X[y_kmeans == 0, 0], X[y_kmeans == 0,1],s=5,c='red',label='Others')
+plt.scatter(X[y_kmeans == 1, 0], X[y_kmeans == 1,1],s=5,c='blue',label='China(mainland),USA,India')
+plt.scatter(kmeans.cluster_centers_[:,0],kmeans.cluster_centers_[:,1],s=15,c='yellow',label='Centroids')
+plt.title('Clusters of countries by Productivity')
+plt.legend()
 plt.show()
