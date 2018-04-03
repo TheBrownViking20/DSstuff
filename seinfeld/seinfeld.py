@@ -6,7 +6,6 @@ import seaborn as sns
 %matplotlib inline
 
 
-
 # importing data
 df = pd.read_csv("scripts.csv")
 del df["Unnamed: 0"]
@@ -18,7 +17,6 @@ dial_df = dial_df[(dial_df["Character"]=="JERRY") | (dial_df["Character"]=="ELAI
 dial_df["Dialogue"][0]
 
 from sklearn.feature_extraction import text
-
 punc = ['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}',"%"]
 stop_words = text.ENGLISH_STOP_WORDS.union(punc)
 
