@@ -122,3 +122,4 @@ plt.scatter(kmeans.cluster_centers_[:,0],kmeans.cluster_centers_[:,1],s=15,c='ye
 plt.title('Clusters of countries by Productivity')
 plt.legend()
 plt.show()
+
