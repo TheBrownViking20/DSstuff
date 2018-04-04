@@ -36,10 +36,10 @@ print(len(vectorizer.vocabulary_))
 X = vectorizer.transform(X)
 
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=101)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=101)
 
-from sklearn.ensemble import RandomForestClassifier as RFC
-rfc = RFC(n_estimators=50,criterion='entropy',random_state=0, n_jobs=-1)
+from sklearn.linear_model import LogisticRegression as RFC
+rfc = RFC()
 rfc.fit(X_train, y_train)
 
 predict = rfc.predict(X_test)
@@ -48,3 +48,10 @@ from sklearn.metrics import confusion_matrix, classification_report
 print(confusion_matrix(y_test, predict))
 print('\n')
 print(classification_report(y_test, predict))
+
+def predictor(s):
+    s = vectorizer.transform(s)
+    pre = rfc.predict(s)
+    print(pre)
+
+predictor(['One night with me can make any woman lesbian.'])
